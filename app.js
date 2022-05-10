@@ -1,5 +1,5 @@
 //# require config in develop mode
-if (process.env.NODE_ENV) {
+if (process.env.DEVELOPING) {
 	require("./config");
 }
 require("./services/db");
