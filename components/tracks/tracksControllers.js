@@ -70,8 +70,6 @@ exports.getTrackMp3 = async (req, res, next) => {
 
 		const [, fileInfo] = await firebaseStorage.file(`${trackId}.mp3`).get();
 
-		console.log(fileInfo)
-
 		res.set({
 			"Content-Type": fileInfo.contentType,
 			"accept-ranges": "bytes",
