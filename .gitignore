@@ -1,0 +1,13 @@
+node_modules/
+config/
+
+tracks/*
+!tracks/.gitkeep
+
+public/avatars/*
+!public/avatars/.gitkeep
+
+public/playlistsCovers/*
+!public/playlistsCovers/.gitkeep
+
+serviceAccountKey.json
