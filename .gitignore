@@ -9,5 +9,3 @@ public/avatars/*
 
 public/playlistsCovers/*
 !public/playlistsCovers/.gitkeep
-
-serviceAccountKey.json
