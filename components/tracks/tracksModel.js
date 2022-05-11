@@ -19,6 +19,10 @@ const tracksSchema = new Schema(
 		cover: {
 			type: String,
 		},
+		url: {
+			type: String,
+			required: true
+		},
 		uploadedByUser: {
 			type: Schema.Types.ObjectId,
 			ref: "User",

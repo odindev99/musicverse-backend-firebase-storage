@@ -6,6 +6,7 @@ const formatTrackStringToDb = require("./services/formatTrackStringToDb");
 const checkQueryNumber = require("../../services/ckeckQueryNumber");
 const throwError = require("../../services/throwError");
 const firebaseStorage = require("../../services/firebaseStorage");
+const mongoose = require("mongoose");
 
 exports.upload = async (req, res, next) => {
 	try {
@@ -33,25 +34,31 @@ exports.upload = async (req, res, next) => {
 		const album = trackExtraInf?.album?.title;
 		const cover = trackExtraInf?.album?.image[3][lastField];
 
+		const newTrackId = new mongoose.Types.ObjectId();
+		const fileName = `${newTrackId}${path.extname(originalname)}`;
+		const file = firebaseStorage.file(fileName);
+
 		//# se crea y se guarda la nueva cancion
 		const newTrack = new Track({
+			_id: newTrackId,
 			name: formatedNameToDb,
 			artist: formatedArtistToDb,
 			album: album && album,
+			url: file.publicUrl(),
 			//# si la api externa no provee un cover se guarda como cover una url al servidor que aloje el backend apuntando al cover general guardado en la carpeta public
 			cover: cover ? cover : undefined,
 			uploadedByUser: req.user._id,
 		});
 
-		const fileName = `${newTrack._id}${path.extname(originalname)}`;
-
-		const file = firebaseStorage.file(fileName);
-
 		//# se agraga al usuario la cancion que subio
 		const logedUser = req.user;
 		logedUser.uploadedTracks = [...logedUser.uploadedTracks, newTrack._id];
 
-		await Promise.all([file.save(buffer), newTrack.save(), logedUser.save()]);
+		await Promise.all([
+			file.save(buffer, { public: true }),
+			newTrack.save(),
+			logedUser.save(),
+		]);
 
 		return res.status(201).json({
 			message: "Track uploaded successfully.",

@@ -12,7 +12,7 @@ exports.addPlaylist = async (req, res, next) => {
 		const { originalname, buffer } = req.file;
 		const logedUser = req.user;
 
-		const fileId = mongoose.Types.ObjectId();
+		const fileId = new mongoose.Types.ObjectId();
 		const coverName = `${fileId}${path.extname(originalname)}`;
 		const coverFile = firebaseStorage.file(coverName);
 		const coverUrl = coverFile.publicUrl();
